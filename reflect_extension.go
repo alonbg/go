@@ -2,12 +2,13 @@ package jsoniter
 
 import (
 	"fmt"
-	"github.com/modern-go/reflect2"
 	"reflect"
 	"sort"
 	"strings"
 	"unicode"
 	"unsafe"
+
+	"github.com/modern-go/reflect2"
 )
 
 var typeDecoders = map[string]ValDecoder{}
@@ -332,6 +333,7 @@ func _getTypeEncoderFromExtension(ctx *ctx, typ reflect2.Type) ValEncoder {
 }
 
 func describeStruct(ctx *ctx, typ reflect2.Type) *StructDescriptor {
+	omitemptyCfg := ctx.omitempty
 	structType := typ.(*reflect2.UnsafeStructType)
 	embeddedBindings := []*Binding{}
 	bindings := []*Binding{}
@@ -350,7 +352,7 @@ func describeStruct(ctx *ctx, typ reflect2.Type) *StructDescriptor {
 				structDescriptor := describeStruct(ctx, field.Type())
 				for _, binding := range structDescriptor.Fields {
 					binding.levels = append([]int{i}, binding.levels...)
-					omitempty := binding.Encoder.(*structFieldEncoder).omitempty
+					omitempty := binding.Encoder.(*structFieldEncoder).omitempty || omitemptyCfg
 					binding.Encoder = &structFieldEncoder{field, binding.Encoder, omitempty}
 					binding.Decoder = &structFieldDecoder{field, binding.Decoder}
 					embeddedBindings = append(embeddedBindings, binding)
@@ -362,7 +364,7 @@ func describeStruct(ctx *ctx, typ reflect2.Type) *StructDescriptor {
 					structDescriptor := describeStruct(ctx, ptrType.Elem())
 					for _, binding := range structDescriptor.Fields {
 						binding.levels = append([]int{i}, binding.levels...)
-						omitempty := binding.Encoder.(*structFieldEncoder).omitempty
+						omitempty := binding.Encoder.(*structFieldEncoder).omitempty || omitemptyCfg
 						binding.Encoder = &dereferenceEncoder{binding.Encoder}
 						binding.Encoder = &structFieldEncoder{field, binding.Encoder, omitempty}
 						binding.Decoder = &dereferenceDecoder{ptrType.Elem(), binding.Decoder}

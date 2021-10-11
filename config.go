@@ -25,6 +25,7 @@ type Config struct {
 	ValidateJsonRawMessage        bool
 	ObjectFieldMustBeSimpleString bool
 	CaseSensitive                 bool
+	OmitEmpty                     bool
 }
 
 // API the public interface of this package.
@@ -72,6 +73,7 @@ type frozenConfig struct {
 	objectFieldMustBeSimpleString bool
 	onlyTaggedField               bool
 	disallowUnknownFields         bool
+	omitempty                     bool
 	decoderCache                  *concurrent.Map
 	encoderCache                  *concurrent.Map
 	encoderExtension              Extension
@@ -134,6 +136,7 @@ func (cfg Config) Froze() API {
 		onlyTaggedField:               cfg.OnlyTaggedField,
 		disallowUnknownFields:         cfg.DisallowUnknownFields,
 		caseSensitive:                 cfg.CaseSensitive,
+		omitempty:                     cfg.OmitEmpty,
 	}
 	api.streamPool = &sync.Pool{
 		New: func() interface{} {
