@@ -1,12 +1,19 @@
 #!/bin/bash
-set -e
+set -e -o pipefail
 set -x
+shopt -s extglob
 
-if [ ! -d /tmp/build-golang/src/github.com/json-iterator ]; then
-    mkdir -p /tmp/build-golang/src/github.com/json-iterator
-    ln -s $PWD /tmp/build-golang/src/github.com/json-iterator/go
-fi
+export LC_ALL=C
 export GOPATH=/tmp/build-golang
-go get -u github.com/golang/dep/cmd/dep
-cd /tmp/build-golang/src/github.com/json-iterator/go
-exec $GOPATH/bin/dep ensure -update
+SELF="$(readlink "${BASH_SOURCE[0]}" || stat -f "${BASH_SOURCE[0]}")"
+cd "$(dirname "$SELF")"
+MODULE=$(grep module go.mod | cut -d" " -f2)
+
+if [ ! -h "$GOPATH/src/$MODULE" ]; then
+    mkdir -p "$GOPATH/src/$(dirname "$MODULE")"
+    ln -s "$PWD" "$GOPATH/src/$MODULE"
+fi
+
+go get -d -u github.com/golang/dep
+cd "$GOPATH/src/$MODULE"
+exec dep ensure -update
