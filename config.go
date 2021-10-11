@@ -59,6 +59,11 @@ var ConfigCompatibleWithStandardLibrary = Config{
 	ValidateJsonRawMessage: true,
 }.Froze()
 
+var ConfigOmitEmpty = Config{
+	EscapeHTML: true,
+	OmitEmpty:  true,
+}.Froze()
+
 // ConfigFastest marshals float with only 6 digits precision
 var ConfigFastest = Config{
 	EscapeHTML:                    false,

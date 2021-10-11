@@ -144,6 +144,13 @@ func (adapter *Encoder) SetEscapeHTML(escapeHTML bool) {
 	adapter.stream.cfg = config.frozeWithCacheReuse(adapter.stream.cfg.extraExtensions)
 }
 
+// SetOmitEmpty omitempty by default, set to false to disable
+func (adapter *Encoder) SetOmitEmpty(omitEmpty bool) {
+	config := adapter.stream.cfg.configBeforeFrozen
+	config.OmitEmpty = omitEmpty
+	adapter.stream.cfg = config.frozeWithCacheReuse(adapter.stream.cfg.extraExtensions)
+}
+
 // Valid reports whether data is a valid JSON encoding.
 func Valid(data []byte) bool {
 	return ConfigDefault.Valid(data)
