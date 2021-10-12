@@ -21,14 +21,6 @@
   version = "v1.2.0"
 
 [[projects]]
-  digest = "1:c4ee6e93a5c82f03f4b1decc3fb04dff907c87c0651970f4eacff99de3839c16"
-  name = "github.com/json-iterator/go"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "024077e996b048517130b21ea6bf12aa23055d3d"
-  version = "v1.1.12"
-
-[[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
   name = "github.com/modern-go/concurrent"
   packages = ["."]
@@ -77,7 +69,6 @@
   input-imports = [
     "github.com/davecgh/go-spew/spew",
     "github.com/google/gofuzz",
-    "github.com/json-iterator/go",
     "github.com/modern-go/concurrent",
     "github.com/modern-go/reflect2",
     "github.com/stretchr/testify/assert",
